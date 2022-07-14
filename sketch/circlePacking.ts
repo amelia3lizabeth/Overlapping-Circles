@@ -29,18 +29,14 @@ interface Position {
 
 function calculatePackedCircles(areaWidth: number, areaHeight: number): Circle[] {
     const validatedCircles: Circle[] = [];
-    for (let i =0; i < 1000; i++){
+    for (let i = 0; i < 1000; i++){
         const candidate = {
             pos: {x:random(0, areaWidth), y:random(0,areaHeight)},
-            radius: random(0,50)}
+            radius: random(0,areaHeight/4)}
         if (validatedCircles.length === 0){
             validatedCircles.push(candidate)
-        }else{
-            for (let circle of validatedCircles){
-                if (Overlap(candidate, circle) === false){
-                    validatedCircles.push(candidate)
-                }
-            }
+        }else if (OverlapAll(validatedCircles,candidate) === false){ 
+            validatedCircles.push(candidate)
         }  
     }
     return validatedCircles;
@@ -64,4 +60,13 @@ function Overlap(Circle1: Circle, Circle2: Circle): Boolean{
     }else{
         return false
     }
+}
+
+function OverlapAll(ArrayOfCircles: Circle [], NewCircle: Circle): Boolean{ 
+    for (let element of ArrayOfCircles){
+        if (Overlap(NewCircle, element) === true){
+            return true
+        }
+    }
+    return false
 }
