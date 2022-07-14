@@ -1,3 +1,23 @@
+/*
+function calculatePackedCircles():Circle[]
+
+	validatedCircles = empty list of circles
+	
+	repeat 1000 times
+	
+			candidate = generate a circle with random position and radius
+	
+			if candidate does not overlap with any circle of validatedCircles
+	
+			    add candidate to validatedCircles
+	
+			else
+	
+			    do nothing (we will not use this candidate)
+	
+	return validatedCircles
+*/
+
 interface Circle {
     pos: Position;
     radius: number;
@@ -8,13 +28,24 @@ interface Position {
 }
 
 function calculatePackedCircles(areaWidth: number, areaHeight: number): Circle[] {
-    //TODO: you need to implement this function properly!  
-    //These are just a couple of random circles, with no consideration yet for overlap.
-    return [
-        { pos: { x: 300, y: 300 }, radius: 100 },
-        { pos: { x: random(0, areaWidth), y: random(0, areaHeight) }, radius: 40 },
-    ];
+    const validatedCircles: Circle[] = [];
+    for (let i =0; i < 1000; i++){
+        const candidate = {
+            pos: {x:random(0, areaWidth), y:random(0,areaHeight)},
+            radius: random(0,50)}
+        if (validatedCircles.length === 0){
+            validatedCircles.push(candidate)
+        }else{
+            for (let circle of validatedCircles){
+                if (Overlap(candidate, circle) === false){
+                    validatedCircles.push(candidate)
+                }
+            }
+        }  
+    }
+    return validatedCircles;
 }
+
 
 /** Returns the distance between two given positions.
     This function doesn't require p5.js 
@@ -24,4 +55,13 @@ function distance(p1: Position, p2: Position): number {
     const y = p1.y - p2.y;
     const hyp = Math.sqrt(x * x + y * y);
     return hyp;
+}
+
+
+function Overlap(Circle1: Circle, Circle2: Circle): Boolean{
+    if ((Circle1.radius + Circle2.radius) > distance(Circle1.pos, Circle2.pos)){
+        return true
+    }else{
+        return false
+    }
 }
